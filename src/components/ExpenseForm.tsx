@@ -1,6 +1,14 @@
+interface Category {
+    id: number;
+    name: string
+}
 
 
-const ExpenseForm = () => {
+interface Props{
+    categories: Category[]
+}
+
+const ExpenseForm = ({categories}: Props) => {
   return (
     <form >
         <div className="mb-3">
@@ -14,10 +22,9 @@ const ExpenseForm = () => {
         <div className="mb-3">
             <label htmlFor="" className="form-label">Category:</label>
             <select className="form-select" aria-label="Default select example">
-                <option selected>Open this select menu</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option value="" defaultValue="">Pick a Category</option>
+                {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option> )}
+                
             </select>
         </div>
         <div className="mb-3">

@@ -1,13 +1,19 @@
+interface Category{
+    id: number;
+    name: string
+}
+
+interface Props{
+    categories: Category[]
+}
 
 
-const ExpenseFilter = () => {
+const ExpenseFilter = ({categories}: Props) => {
   return (
    <div className="mb-3">
      <select className="form-select" aria-label="Default select example">
-        <option selected>Open this select menu</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+        <option value = "" defaultValue="">Filter by category</option>
+        {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
     </select>
    </div>
   )

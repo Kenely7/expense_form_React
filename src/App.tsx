@@ -35,6 +35,8 @@ const App = () => {
     },[]);
     const deleteExpense = (id:number) =>{
         setExpenses(expenses.filter(expense => expense.id !=id))
+        axios.delete("http://127.0.0.1:8001/expenses/"+ id)
+        .catch((err => setError(err.message)))
     
     }
   return (

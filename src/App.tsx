@@ -4,11 +4,24 @@ import ExpenseForm from './components/ExpenseForm'
 import ExpenseList from './components/ExpenseList'
 import axios from 'axios'
 
+interface Category{
+    id :number;
+    name: string ;
+}
+
+interface Expenses {
+    id: number;
+    description: string;
+    amount: number;
+    category_id: number;
+    category:Category;
+}
 const App = () => {
 
-    const [expenses, setExpenses] = useState([])
+    const [expenses, setExpenses] = useState<Expenses[]>([])
     const [categories, setCategories] = useState([])
     const [error, setError] = useState("")
+    const [selectedCategory, setSelectedCategory]= useState<number>()
     
 
     useEffect(() => {
@@ -33,18 +46,37 @@ const App = () => {
         })
         .catch((err) => setError(err.message))
     },[]);
+
+    const addExpense = (data: Expenses) => {
+        setExpenses([data, ...expenses])
+        axios.post("http://127.0.0.1:8001/expenses/", data)
+        .then(res => setExpenses([res.data, ...expenses]))
+        .catch((err) => setError(err.message))
+    };   
     const deleteExpense = (id:number) =>{
-        setExpenses(expenses.filter(expense => expense.id !=id))
+        setExpenses(expenses.filter(expense => expense.id != id))
         axios.delete("http://127.0.0.1:8001/expenses/"+ id)
         .catch((err => setError(err.message)))
-    
+    };
+
+    const chooseCategory = (id:number)=> {
+        setSelectedCategory(id)
     }
+    
+      const filteredExpenses = selectedCategory? 
+         expenses.filter((expense) => 
+             expense.category.id == selectedCategory)
+           : expenses;
+    
+    
+    
   return (
     <>
+    <p>{selectedCategory}</p>
     {error && <p className="text-danger">{error}</p>}
-    <ExpenseForm categories = {categories}/>
-    <ExpenseFilter categories = {categories}/>
-    <ExpenseList expenses={expenses} deleteExpense = {deleteExpense }/>
+    <ExpenseForm categories = {categories} addExpense ={addExpense}/>
+    <ExpenseFilter categories = {categories} chooseCategory ={chooseCategory}/>
+    <ExpenseList expenses={filteredExpenses} deleteExpense = { deleteExpense }/>
     </>
   )
 }

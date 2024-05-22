@@ -1,4 +1,7 @@
-interface Category{}
+interface Category{
+   id : number;
+   name: string;
+}
 
 interface Expenses {
     id: number;
@@ -8,7 +11,7 @@ interface Expenses {
     category:Category;
 }
 interface Props{
-    expenses:Expenses[]
+    expenses:Expenses[];
     deleteExpense: (id: number) => void
 }
 
@@ -28,7 +31,7 @@ const ExpenseList = ({expenses, deleteExpense}: Props) => {
       <tr key={expense.id}>
         <td>{expense.description}</td>
         <td>${expense.amount}</td>
-        <td>{expense.category.name}</td>
+        <td>{expense.category?.name}</td>
         <td>
             <button onClick={()=> deleteExpense(expense.id)} className="btn btn-outline-danger">Delete</button>
         </td>
@@ -38,7 +41,8 @@ const ExpenseList = ({expenses, deleteExpense}: Props) => {
         <td>
             <strong>Total:</strong>
         </td>
-        <td>{expenses.reduce((acc, expense) => acc + parseInt(expense.amount),0).toFixed(2)}
+        <td>
+            {expenses.reduce((acc, expense) => acc + parseInt(expense.amount) ,0).toFixed(2)}
         </td>
     </tr>
       

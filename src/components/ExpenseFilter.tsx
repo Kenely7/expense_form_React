@@ -5,13 +5,13 @@ interface Category{
 
 interface Props{
     categories: Category[]
+    chooseCategory :(id:number) => void
 }
 
-
-const ExpenseFilter = ({categories}: Props) => {
+const ExpenseFilter = ({categories, chooseCategory}: Props) => {
   return (
    <div className="mb-3">
-     <select className="form-select" aria-label="Default select example">
+     <select className="form-select" onChange={(event) => chooseCategory(parseInt(event.target.value))}>
         <option value = "" defaultValue="">Filter by category</option>
         {categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}
     </select>
